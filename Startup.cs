@@ -1,9 +1,17 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using ProjetoEstacio.DbApllication;
+using ProjetoEstacio.Repository;
+using ProjetoEstacio.Services;
+using MySql.Data.MySqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ProjetoEstacio
 {
@@ -18,8 +26,22 @@ namespace ProjetoEstacio
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), 
+                    new MySqlServerVersion(new Version(5, 0, 4)))
+                     
+                ); // Certifique-se de ajustar a versão do MySQL para a que você está usando.
+
             services.AddControllers();
-            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirFrontend", builder =>
+                {
+                    builder.WithOrigins("http://localhost:5000") // Permitir apenas essa origem
+                        .AllowAnyMethod() // Permitir qualquer método (GET, POST, etc.)
+                        .AllowAnyHeader(); // Permitir qualquer cabeçalho
+                });
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo 
@@ -29,6 +51,9 @@ namespace ProjetoEstacio
                     Description = "Uma descrição curta da sua API"
                 });
             });
+            
+            services.AddScoped<UserRepository>();
+            services.AddScoped<UserService>();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -54,7 +79,7 @@ namespace ProjetoEstacio
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors("PermitirFrontend");
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

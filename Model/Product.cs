@@ -5,11 +5,11 @@ namespace ProjetoEstacio.Model
 {
     public class Product
     {
-        private Guid Id { get; set; }
-        private string Name { get; set; }
-        private string Description { get; set; }
-        private float Price { get; set; }
-        private int QuantityStock { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public float Price { get; set; }
+        public int QuantityStock { get; set; }
         
         public Product(string name, string description, float price, int quantityStock)
         {

@@ -4,12 +4,12 @@ namespace ProjetoEstacio.Model
 {
     public class User
     {
-        private Guid Id { get; set; }
-        private string Name { get; set; }
-        private string Email { get; set; }
-        private string Password { get; set; }
-        private string Phone { get; set; }
-        private string Cpf { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string Phone { get; set; }
+        public string Cpf { get; set; }
         
         public User(string name, string email, string password, string phone, string cpf)
         {

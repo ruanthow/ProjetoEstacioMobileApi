@@ -10,7 +10,7 @@ using ProjetoEstacio.Services;
 namespace ProjetoEstacio.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    
     public class UserController : ControllerBase
     {   
         private readonly UserService _userService;

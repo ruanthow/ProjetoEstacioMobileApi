@@ -17,6 +17,7 @@
     <Compile Remove="WeatherForecast.cs" />
     <Compile Remove="Model\user.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Remove="DTOs\ProductDTO.cs" />
   </ItemGroup>
 
 </Project>

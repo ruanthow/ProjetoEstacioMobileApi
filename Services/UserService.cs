@@ -19,10 +19,10 @@ namespace ProjetoEstacio.Services
 
         public async Task<List<UserDTOResponse>> GetUsersAsync()
         {
-            var users = await _userRepository.GetUsers(); // Utilize a versão assíncrona
+            var users = await _userRepository.GetUsers(); 
             if (users == null || users.Count < 1)
             {
-                return null; // Retorna nulo se não houver usuários
+                return null;
             }
 
             return users.Select(user => new UserDTOResponse
@@ -37,11 +37,11 @@ namespace ProjetoEstacio.Services
 
         public async Task<UserDTOResponse> GetUserByIdAsync(Guid id)
         {
-            var user = await _userRepository.GetUserById(id); // Utilize a versão assíncrona
+            var user = await _userRepository.GetUserById(id); 
           
             if (user == null)
             {
-                return null; // Retorna nulo se o usuário não for encontrado
+                return null; 
             }
 
             return new UserDTOResponse
@@ -58,7 +58,7 @@ namespace ProjetoEstacio.Services
         {
             if (userDto == null)
             {
-                throw new ArgumentNullException(nameof(userDto)); // Verifica se userDto não é nulo
+                throw new ArgumentNullException(nameof(userDto)); 
             }
             
             await _userRepository.SaveUser(userDto);

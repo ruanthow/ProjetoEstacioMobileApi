@@ -54,6 +54,8 @@ namespace ProjetoEstacio
             
             services.AddScoped<UserRepository>();
             services.AddScoped<UserService>();
+            services.AddScoped<ProductRepository>();
+            services.AddScoped<ProductService>();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

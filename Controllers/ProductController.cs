@@ -56,8 +56,39 @@ namespace ProjetoEstacio.Controllers
            catch (Exception e)
            {
                Console.WriteLine(e);
-               throw new Exception("ruim");
+               throw new Exception("Operação deu errado. tente mais tarde.");
+           }
+       }
+
+       [HttpPut("update-product")]
+       public async Task<IActionResult> UpdateProduct(ProductDTO product)
+       {
+           try
+           {
+                await _productService.UpdateProductAsync(product);
+                return Ok();
+           }
+           catch (Exception e)
+           {
+               Console.WriteLine(e);
+               throw new Exception("Operação deu errado. tente mais tarde.");
+           }
+       }
+
+       [HttpDelete("delete-product/{id}")]
+       public async Task<IActionResult> DeleteProduct(Guid id)
+       {
+           try
+           {
+                await _productService.DeleteProductAsync(id);
+                return Ok();
+           }
+           catch (Exception e)
+           {
+               Console.WriteLine(e);
+               throw new Exception("Operação deu errado. tente mais tarde.");
            }
        }
     }
+    
 }

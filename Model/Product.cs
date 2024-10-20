@@ -11,9 +11,9 @@ namespace ProjetoEstacio.Model
         public float Price { get; set; } 
         public int Stock { get; set; }
         
-        public Product(string name, string description, float price, int stock)
+        public Product(Guid id, string name, string description, float price, int stock)
         {
-            this.Id = Guid.NewGuid();
+            this.Id = id;
             this.Name = name;
             this.Description = description;
             this.Price = price;

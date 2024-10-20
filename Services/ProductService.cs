@@ -65,17 +65,41 @@ namespace ProjetoEstacio.Services
 
         public async Task AddProductAsync(ProductDTO product)
         {
-            await _productRepository.SaveProduct(product);
+            try
+            {
+                await _productRepository.SaveProduct(product);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception("Operação deu errado. tente mais tarde.");
+            }
         }
 
         public async Task UpdateProductAsync(ProductDTO product)
         {
-            await _productRepository.EditProduct(product);
+            try
+            {
+               await _productRepository.EditProduct(product);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception("Operação deu errado. tente mais tarde.");
+            }
         }
 
         public async Task DeleteProductAsync(Guid productId)
         {
-           await _productRepository.DeleteProduct(productId);
+            try
+            {
+                await _productRepository.DeleteProduct(productId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

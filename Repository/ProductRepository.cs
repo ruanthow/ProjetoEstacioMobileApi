@@ -45,7 +45,7 @@ namespace ProjetoEstacio.Repository
         {
             try
             {
-                var product = new Product(productDTO.Name, productDTO.Description, productDTO.Price, productDTO.Stock);
+                var product = new Product(Guid.NewGuid(), productDTO.Name, productDTO.Description, productDTO.Price, productDTO.Stock);
                 await _context.Products.AddAsync(product);
                 await _context.SaveChangesAsync();
             }
@@ -60,11 +60,12 @@ namespace ProjetoEstacio.Repository
         {
             try
             {
-                var product = new Product(productDTO.Name, productDTO.Description, productDTO.Price, productDTO.Stock);
                 var productExist = await _context.Products.FindAsync(productDTO.Id);
                 if (productExist != null)
                 {
-                    _context.Update(product);
+                    var product = new Product(productDTO.Id, productDTO.Name, productDTO.Description, productDTO.Price, productDTO.Stock);
+                    _context.Attach(product);
+                    _context.Entry(product).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
             }

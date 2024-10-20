@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,6 +34,48 @@ namespace ProjetoEstacio.Services
                 Stock = product.Stock,
                 Description = product.Description,
             }).ToList();
+        }
+
+        public async Task<ProductDTOResponse> GetProductByIdAsync(Guid productId)
+        {
+            try
+            {
+                var product = await _productRepository.GetProductById(productId);
+                if (product != null)
+                {
+                    var productDTO = new ProductDTOResponse()
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        Price = product.Price,
+                        Description = product.Description,
+                        Stock = product.Stock,
+                    };
+                    
+                    return productDTO;
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task AddProductAsync(ProductDTO product)
+        {
+            await _productRepository.SaveProduct(product);
+        }
+
+        public async Task UpdateProductAsync(ProductDTO product)
+        {
+            await _productRepository.EditProduct(product);
+        }
+
+        public async Task DeleteProductAsync(Guid productId)
+        {
+           await _productRepository.DeleteProduct(productId);
         }
     }
 }

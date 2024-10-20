@@ -11,7 +11,7 @@ using ProjetoEstacio.Model;
 
 namespace ProjetoEstacio.Repository
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -22,12 +22,42 @@ namespace ProjetoEstacio.Repository
 
         public async Task<List<User>> GetUsers()
         {
-            return await _context.Users.FromSqlRaw("SELECT * FROM users").ToListAsync();
+            try
+            {
+                var users = await _context.Users.FromSqlRaw("SELECT * FROM users").ToListAsync();
+                if (users != null)
+                {
+                    return users;
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception("Operação deu errado. tente mais tarde.");
+            }
+            
         }
 
         public async Task<User> GetUserById(Guid id)
         {
-            return await _context.Users.FindAsync(id);
+            try
+            {
+                var findUser = await _context.Users.FindAsync(id);
+
+                if (findUser != null)
+                {
+                    return findUser;
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception("Operação deu errado. tente mais tarde.");
+            }
         }
 
         public async Task SaveUser(UserDTO user)
@@ -36,8 +66,8 @@ namespace ProjetoEstacio.Repository
 
             try
             {
-                var exist = await _context.Users.FirstOrDefaultAsync(u => u.Email == saveUser.Email);
-                if (exist != null)
+                var findUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == saveUser.Email);
+                if (findUser != null)
                 { 
                     throw new CustomException("Email já cadastrado", "400");
                 }
@@ -46,9 +76,9 @@ namespace ProjetoEstacio.Repository
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException dbEx)
-            {
-                // Captura erros relacionados a atualizações no banco de dados
-                throw new Exception($"Ago deu errado");
+            {   
+                Console.WriteLine(dbEx);
+                throw new Exception("Operação deu errado. tente mais tarde.");
             }
             
         }
@@ -56,22 +86,43 @@ namespace ProjetoEstacio.Repository
 
         public async Task EditUser(User user)
         {
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var findUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+                if (findUser != null)
+                {
+                    _context.Users.Update(user);
+                    await _context.SaveChangesAsync();
+                    return;
+                }
+                throw new Exception("Usuario não encontrado."); 
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception("Operação deu errado. tente mais tarde.");
+            }
         }
 
         public async Task DeleteUser(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
+            try
             {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
+                var user = await _context.Users.FindAsync(id);
+                if (user != null)
+                {
+                    _context.Users.Remove(user);
+                    await _context.SaveChangesAsync();
+                    return;
+                }
                 throw new Exception("Usuário não encontrado.");
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception("Operação deu errado. tente mais tarde.");
+            }
         }
+        
     }
 }

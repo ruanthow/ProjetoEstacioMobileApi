@@ -53,8 +53,8 @@ namespace ProjetoEstacio
             });
             
             services.AddScoped<UserRepository>();
-            services.AddScoped<UserService>();
             services.AddScoped<ProductRepository>();
+            services.AddScoped<UserService>();
             services.AddScoped<ProductService>();
         }
         

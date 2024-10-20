@@ -66,7 +66,7 @@ namespace ProjetoEstacio.Controllers
                     return BadRequest("Dados do usuário não podem ser nulos.");
                 }
                 await _userService.SaveUser(user);
-                return CreatedAtAction(nameof(GetUser), new { id = user.Name }, "Usuário criado com sucesso."); // Retorna 201 Created
+                return CreatedAtAction(nameof(GetUser), new { id = user.Name }, "Usuário criado com sucesso.");
             }
             catch (CustomException ex)
             {

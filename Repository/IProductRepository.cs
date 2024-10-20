@@ -9,9 +9,9 @@ namespace ProjetoEstacio.Repository
     public interface IProductRepository
     {
         Task<List<Product>> GetAllProducts();
-        Task<Product> GetProductById(String productId);
-        void SaveProduct( ProductDTOResponse productDtoResponse );
-        void EditProduct(Product product);
-        void DeleteProduct(Guid productId);
+        Task<Product> GetProductById(Guid productId);
+        Task SaveProduct(ProductDTO productDTO );
+        Task EditProduct(ProductDTO product);
+        Task DeleteProduct(Guid productId);
     }
 }

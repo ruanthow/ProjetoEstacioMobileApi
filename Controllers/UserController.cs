@@ -73,5 +73,28 @@ namespace ProjetoEstacio.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, new { Mensagem = ex.ErrorMessage, Erro = ex.ErrorCode });
             }
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO login)
+        {
+            try
+            {
+                if (login == null)
+                {
+                    return BadRequest("Login ou senha esta incorreto.");
+                }
+                var result = await _userService.Login(login);
+                if (result == null)
+                {
+                    return BadRequest("Login ou senha incorreto.");
+                }
+                return Ok(result);
+                
+            }
+            catch (CustomException ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { Mensagem = ex.ErrorMessage, Erro = ex.ErrorCode });
+            }
+        }
     }
 }

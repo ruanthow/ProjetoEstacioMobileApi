@@ -62,16 +62,17 @@ namespace ProjetoEstacio.Repository
 
         public async Task SaveUser(UserDTO user)
         {
-            var saveUser = new User(user.Name, user.Email, user.Password, user.Phone, user.Cpf);
-
+            
             try
             {
-                var findUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == saveUser.Email);
+                var findUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
                 if (findUser != null)
                 { 
                     throw new CustomException("Email já cadastrado", "400");
                 }
 
+                var cryptPassword = Crypto.RegisterUser(user.Password);
+                var saveUser = new User(user.Name, user.Email, cryptPassword, user.Phone, user.Cpf);
                 await _context.Users.AddAsync(saveUser);
                 await _context.SaveChangesAsync();
             }
@@ -123,6 +124,27 @@ namespace ProjetoEstacio.Repository
                 throw new Exception("Operação deu errado. tente mais tarde.");
             }
         }
+
+        public async Task<string> Authentication(LoginDTO login)
+        {
+           
+            var getUser = await _context.Users.FirstOrDefaultAsync(x => login.Email == x.Email);
+    
+          
+            if (getUser != null)
+            { 
+                var verified = Crypto.LoginUser(login.Password, getUser.Password);
+
+                if (verified)
+                {
+                    Token token = new Token();
+                    return token.GenerateJwtToken(getUser.Id.ToString());
+                }
+            }
+           
+            return null; 
+        }
+
         
     }
 }

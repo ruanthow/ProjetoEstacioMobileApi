@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ using ProjetoEstacio.Services;
 using MySql.Data.MySqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ProjetoEstacio
 {
@@ -26,6 +29,25 @@ namespace ProjetoEstacio
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = "your-issuer", // Substitua pelo seu Issuer
+                        ValidAudience = "your-audience", // Substitua pelo seu Audience
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("testeapimobile")) // Substitua pela sua chave secreta
+                    };
+                });
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), 
                     new MySqlServerVersion(new Version(5, 0, 4)))
@@ -82,6 +104,8 @@ namespace ProjetoEstacio
 
             app.UseRouting();
             app.UseCors("PermitirFrontend");
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

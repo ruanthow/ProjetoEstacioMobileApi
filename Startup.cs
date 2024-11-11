@@ -51,6 +51,7 @@ namespace ProjetoEstacio
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), 
                     new MySqlServerVersion(new Version(5, 0, 4)))
+
                      
                 ); // Certifique-se de ajustar a versão do MySQL para a que você está usando.
 

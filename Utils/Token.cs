@@ -8,7 +8,7 @@ namespace ProjetoEstacio.Model
 {
     public class Token
     {
-        public string GenerateJwtToken(string userId)
+        public static string GenerateJwtToken(string userId)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-very-secure-and-random-secret-key-12345678"));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

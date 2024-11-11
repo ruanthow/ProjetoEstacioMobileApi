@@ -8,7 +8,7 @@ namespace ProjetoEstacio.Repository
 {
     public interface IProductRepository
     {
-        Task<List<Product>> GetAllProducts();
+        Task<List<ProductDTOResponse>> GetAllProducts();
         Task<Product> GetProductById(Guid productId);
         Task SaveProduct(ProductDTO productDTO );
         Task EditProduct(ProductDTO product);

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
@@ -19,7 +20,8 @@ namespace ProjetoEstacio.Controllers
         {
             _userService = userService;
         }
-       
+        
+        
         [HttpGet("get-all-users")]
         public async Task<IActionResult> GetAllUsers()
         {

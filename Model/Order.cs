@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjetoEstacio.Model
 {
+    [Table("ordes")]
     public class Order
     {
         private Guid Id { get; set; }

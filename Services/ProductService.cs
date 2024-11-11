@@ -24,16 +24,9 @@ namespace ProjetoEstacio.Services
             {
                 return null;
             }
-            
-          
-            return products.Select(product => new ProductDTOResponse()
-            {   
-                Id = product.Id,
-                Name = product.Name,
-                Price = product.Price,
-                Stock = product.Stock,
-                Description = product.Description,
-            }).ToList();
+
+
+            return products;
         }
 
         public async Task<ProductDTOResponse> GetProductByIdAsync(Guid productId)

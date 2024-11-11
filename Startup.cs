@@ -59,9 +59,9 @@ namespace ProjetoEstacio
             {
                 options.AddPolicy("PermitirFrontend", builder =>
                 {
-                    builder.WithOrigins("http://localhost:5000") // Permitir apenas essa origem
-                        .AllowAnyMethod() // Permitir qualquer método (GET, POST, etc.)
-                        .AllowAnyHeader(); // Permitir qualquer cabeçalho
+                    builder.WithOrigins("http://localhost:8081")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
                 });
             });
             services.AddSwaggerGen(c =>

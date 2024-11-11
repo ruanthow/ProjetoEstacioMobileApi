@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProjetoEstacio.DbApllication;
@@ -17,9 +18,30 @@ namespace ProjetoEstacio.Repository
             _context = context;
         }
 
-        public async Task<List<Product>> GetAllProducts()
-        {
-            return await _context.Products.FromSqlRaw("SELECT * FROM products").ToListAsync();
+        public async Task<List<ProductDTOResponse>> GetAllProducts()
+        { 
+            try
+            {
+                var images = await _context.Images.FromSqlRaw("SELECT * FROM images").ToListAsync();
+                var products = await _context.Products.FromSqlRaw("SELECT * FROM products").ToListAsync();
+
+                var response = products.Select(product => new ProductDTOResponse()
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Stock = product.Stock,
+                    Price = product.Price,
+                    Images = images.Where(x => x.ProductId == product.Id).ToList()
+                }).ToList();
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception("Algo deu errado");
+            }
         }
 
         public async Task<Product> GetProductById(Guid id)

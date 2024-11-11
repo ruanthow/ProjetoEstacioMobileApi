@@ -64,7 +64,7 @@ namespace ProjetoEstacio.Services
             await _userRepository.SaveUser(userDto);
         }
         
-        public async Task<string> Login(LoginDTO loginDto)
+        public async Task<LoginResponseDTO> Login(LoginDTO loginDto)
         {
             if (loginDto == null)
             {

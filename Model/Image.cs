@@ -1,12 +1,14 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjetoEstacio.Model
 {
+    [Table("images")]
     public class Image
     {
-        private Guid Id { get; set; }
-        private Guid ProductId { get; set; }
-        private string ImagePath { get; set; }
+        public Guid Id { get; set; }
+        public Guid ProductId { get; set; }
+        public string ImagePath { get; set; }
         
         public Image(Guid productId, string imagePath)
         {

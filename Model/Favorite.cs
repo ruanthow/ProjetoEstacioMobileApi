@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjetoEstacio.Model
 {
+    [Table("favoritos")]
     public class Favorite
     {
         private Guid id { get; set; }

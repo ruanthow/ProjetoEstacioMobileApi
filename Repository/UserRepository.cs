@@ -65,7 +65,9 @@ namespace ProjetoEstacio.Repository
             
             try
             {
-                var findUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+                var email = user.Email;
+                var findUser = await _context.Users.FromSqlRaw("SELECT * FROM users WHERE users.email = {0}", email)
+                    .FirstOrDefaultAsync();
                 if (findUser != null)
                 { 
                     throw new CustomException("Email já cadastrado", "400");
@@ -125,7 +127,7 @@ namespace ProjetoEstacio.Repository
             }
         }
 
-        public async Task<string> Authentication(LoginDTO login)
+        public async Task<LoginResponseDTO> Authentication(LoginDTO login)
         {
            
             var getUser = await _context.Users.FirstOrDefaultAsync(x => login.Email == x.Email);
@@ -137,8 +139,13 @@ namespace ProjetoEstacio.Repository
 
                 if (verified)
                 {
-                    Token token = new Token();
-                    return token.GenerateJwtToken(getUser.Id.ToString());
+                    
+                    var token = Token.GenerateJwtToken(getUser.Id.ToString());
+                    var idUser = getUser.Id;
+                    var name = getUser.Name;
+                    var email = getUser.Email;
+                    
+                    return new LoginResponseDTO(token, idUser.ToString(), email, name);
                 }
             }
            
